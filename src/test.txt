@@ -1,0 +1,7 @@
+The VIC cipher was a pencil and paper cipher used by the Soviet spy Reino Hayhanen, codenamed "VICTOR".
+
+If the cipher were to be given a modern technical name, it would be known as a "straddling bipartite monoalphabetic substitution superenciphered by modified double transposition."[1] However, by general classification it is part of the Nihilist family of ciphers.
+
+It was arguably the most complex hand-operated cipher ever seen, when it was first discovered. The initial analysis done by the American National Security Agency (NSA) in 1953 did not absolutely conclude that it was a hand cipher, but its placement in a hollowed out 5c coin implied it could be broken by pencil and paper. The VIC cipher remained unbroken until more information about its structure was available.
+
+Although certainly not as complex or secure as modern computer operated stream ciphers or block ciphers, in practice messages protected by it resisted all attempts at cryptanalysis by at least the NSA from its discovery in 1953 until Häyhänen's defection in 1957.
