@@ -2,11 +2,7 @@
 	Nihilist
 
 Performs encryption, decryption, and chart generation based on the VIC Soviet cipher; 
-a straddling checkerboard of the nihilist family of ciphers. The most commonly used 
-letters are placed at the top row, and encoded as a single digit. Two gaps are left 
-for the second and third rows to double encode leading with the row digit. The codes 
-are placed inline as the output text, and commonly added against a key (modulo 10) of 
-some psuedo-random data, pre-selected and shared.
+a straddling checkerboard of the nihilist family of ciphers.
 """
 
 module Nihilist
@@ -19,11 +15,17 @@ using CSV
 
 Creates a chart.
 EX:
+┌───┬┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 │   ││ 3 │ 4 │ 9 │ 0 │ 7 │ 6 │ 8 │ 2 │ 5 │ 1 │
 ├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
 │ X ││   │ i │ r │ e │ a │ t │ s │ n │ o │   │
 │ 1 ││ v │ k │ y │ j │ d │ m │ z │ g │ c │ w │
 │ 3 ││ u │ b │ l │ q │ f │ h │ p │ . │ / │ x │
+└───┴┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+The most commonly used letters are placed at the top row, and encoded as a single digit. Two gaps are left 
+for the second and third rows to double encode leading with the row digit. The codes 
+are placed inline as the output text, and commonly added against a key (modulo 10) of 
+some psuedo-random data, pre-selected and shared.
 
 ##Returns:
 DataFrame of a chart
@@ -32,11 +34,11 @@ DataFrame of a chart
 function chart_maker(; file_loc::String="", file_out::String="")
 	if length(file_loc)>0 #load from file
 		try
-			#make it a chart
 			return CSV.read(file_loc)
 		catch
 			error("File could not be read:\n$file_loc")
 		end
+
 	else #make a chart
 		#hardcode the numbers just to grab them randomly easier,
 		#and hardcode the alphabets rather then rulefind for "aeinorst"
@@ -139,7 +141,9 @@ it will be added to the message modulo 10.
 The encoded message, formatted accordingly.
 """
 
-function encode(message::String, chart::DataFrame; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
+DataFrameOrPath = Union{DataFrame, String}
+
+function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
 				group_per_line::Integer=8, key_pos::Integer=1, num_repeat::Integer=3, file_out::String="", padding::Bool=true)
 	#file-load; check for a filepath, and throw a catch
 	if length(message)<45 && isfile(message)
@@ -151,7 +155,7 @@ function encode(message::String, chart::DataFrame; key::Integer=0, spacing_enabl
 	end
 	#message handling - remove special chars and spaces
 	plaintext=join(split(lowercase(message)))
-
+	chart = (isequal(typeof(chart), String)?chart_maker(file_loc=chart):chart)
 	#take each char of message, find it in the chart- if its a number, put in the 
 	#/ char and encode as itself ~3x (so 11 would become /111111/, 12 = /111222/, so on)
 	#find the slash in the chart 
@@ -212,15 +216,15 @@ function encode(message::String, chart::DataFrame; key::Integer=0, spacing_enabl
 
 	#Key handling - could handle as you make the output, could handle here(slower) - tbd
 
-
 	if padding
-		#Pad cipher to proper length to finish group off
+		#Pad current group
 		if length(ciphertext)%group_length>0
 			for i in 1:(group_length-(length(ciphertext)%group_length))
 				ciphertext*=string(rand(UInt8)%10)
 			end
 		end
 	end
+
 	#Break cipher into char groups, and handle newlines
 	group_space=0; group_line=0; group_count=0
 	for char in ciphertext
@@ -237,6 +241,7 @@ function encode(message::String, chart::DataFrame; key::Integer=0, spacing_enabl
 			group_line=0
 		end
 	end
+
 	if padding
 		#Pad entire cipher to square off
 		if group_count%group_per_line>0
@@ -259,6 +264,7 @@ function encode(message::String, chart::DataFrame; key::Integer=0, spacing_enabl
 			error("File could not be read:\n$file_out")
 		end
 	end
+
 	return output
 end
 
@@ -279,7 +285,7 @@ Handles decoding of message. If a key is provided, will be subtracted from the m
 Decoded message.
 """
 
-function decode(message::String, chart::DataFrame; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
+function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
 	#check if a file, if so, load as message
 	if length(message)<45 && isfile(message)
 		try
@@ -289,6 +295,7 @@ function decode(message::String, chart::DataFrame; key_pos::Integer=1, num_repea
 		end
 	end
 	ciphertext=join(split(message))
+	chart = (isequal(typeof(chart),String)?chart_maker(file_loc=chart):chart)
 
 	plaintext=""
 	index=1
@@ -325,35 +332,5 @@ function decode(message::String, chart::DataFrame; key_pos::Integer=1, num_repea
 
 	return plaintext
 end
-function run_test1()
-	chart = chart_maker()
-	cleartext="The Nihilist cipher was used extensively by the Soviets during and after the war in the 40s."
-	ciphertext = encode(cleartext, chart)
-	plaintext = decode(ciphertext, chart)
-	strip_text=join(split(lowercase(cleartext)))
-	return isequal(strip_text, plaintext[1:length(strip_text)])
-end
-run_test1()
 
-function run_test2()
-	chart = chart_maker()
-	cleartext="The VIC cipher was a pencil and paper cipher used by the Soviet spy Reino Hayhanen, codenamed 'VICTOR'.
-				If the cipher were to be given a modern technical name, it would be known as a 'straddling bipartite 
-				monoalphabetic substitution superenciphered by modified double transposition.'[1] However, by general 
-				classification it is part of the Nihilist family of ciphers. It was arguably the most complex hand-operated 
-				cipher ever seen, when it was first discovered. The initial analysis done by the American National Security 
-				Agency (NSA) in 1953 did not absolutely conclude that it was a hand cipher, but its placement in a hollowed 
-				out 5c coin implied it could be broken by pencil and paper. The VIC cipher remained unbroken until more 
-				information about its structure was available. Although certainly not as complex or secure as modern 
-				computer operated stream ciphers or block ciphers, in practice messages protected by it resisted all 
-				attempts at cryptanalysis by at least the NSA from its discovery in 1953 until Häyhänen's defection 
-				in 1957."
-	ciphertext = encode(cleartext, chart, padding=false)
-	plaintext = decode(ciphertext, chart)
-	println(ciphertext)
-	println(plaintext)
-end
-run_test2()
-
-#include("../test/runtests.jl")
 end
