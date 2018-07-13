@@ -10,8 +10,11 @@ module Nihilist
 using DataFrames
 using CSV
 
+#Type union for interpreting loading a chart from file in the encode/decode stages
+DataFrameOrPath=Union{DataFrame, String}
+
 """
-	chart_maker()
+	chart_maker(; file_loc::String="", file_out::String="")
 
 Creates a chart.
 EX:
@@ -19,9 +22,12 @@ EX:
 │   ││ 3 │ 4 │ 9 │ 0 │ 7 │ 6 │ 8 │ 2 │ 5 │ 1 │
 ├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
 │ X ││   │ i │ r │ e │ a │ t │ s │ n │ o │   │
+├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
 │ 1 ││ v │ k │ y │ j │ d │ m │ z │ g │ c │ w │
+├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
 │ 3 ││ u │ b │ l │ q │ f │ h │ p │ . │ / │ x │
 └───┴┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+
 The most commonly used letters are placed at the top row, and encoded as a single digit. Two gaps are left 
 for the second and third rows to double encode leading with the row digit. The codes 
 are placed inline as the output text, and commonly added against a key (modulo 10) of 
@@ -114,13 +120,9 @@ function chart_maker(; file_loc::String="", file_out::String="")
 end
 
 
-#Simple helper function to check if a given letter is indeed a number
-isnumeric(s::AbstractString) = parse(s) isa Number
-
-
 """
-	encode(message::String, chart::DataFrame; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
-			group_per_line::Integer=8, key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
+	encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
+			group_per_line::Integer=8, key_pos::Integer=1, num_repeat::Integer=3, file_out::String="", padding::Bool=true)
 
 Handles encoding of a plaintext message into code according to the provided chart Dataframe. If a key is provided, 
 it will be added to the message modulo 10.
@@ -141,14 +143,12 @@ it will be added to the message modulo 10.
 The encoded message, formatted accordingly.
 """
 
-DataFrameOrPath = Union{DataFrame, String}
-
 function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
 				group_per_line::Integer=8, key_pos::Integer=1, num_repeat::Integer=3, file_out::String="", padding::Bool=true)
 	#file-load; check for a filepath, and throw a catch
 	if length(message)<45 && isfile(message)
 		try
-			message = open(message)
+			message=open(message)
 		catch
 			error("File could not be read:\n$file_out")
 		end
@@ -230,13 +230,13 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 	for char in ciphertext
 		output*=char
 		group_space+=1
-		if group_space==group_length
+		if group_space == group_length
 			output*=(spacing_enable?" ":"")
 			group_space=0
 			group_line+=1
 			group_count+=1
 		end
-		if group_line==group_per_line
+		if group_line == group_per_line
 			output*="\n"
 			group_line=0
 		end
@@ -254,6 +254,8 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		end
 	end
 
+	#handle keys here?
+
 	#if file_out given, try to output to that file
 	if length(file_out)>0
 		try
@@ -270,7 +272,7 @@ end
 
 
 """
-	decode(message::String, chart::DataFrame; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
+	decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
 
 Handles decoding of message. If a key is provided, will be subtracted from the message, modulo 10
 
@@ -289,13 +291,13 @@ function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num
 	#check if a file, if so, load as message
 	if length(message)<45 && isfile(message)
 		try
-			message = read(message, String)
+			message=read(message, String)
 		catch
 			error("File could not be read:\n$file_loc")
 		end
 	end
 	ciphertext=join(split(message))
-	chart = (isequal(typeof(chart),String)?chart_maker(file_loc=chart):chart)
+	chart=(isequal(typeof(chart),String)?chart_maker(file_loc=chart):chart)
 
 	plaintext=""
 	index=1
