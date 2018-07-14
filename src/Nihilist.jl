@@ -4,6 +4,7 @@
 Performs encryption, decryption, and chart generation based on the VIC Soviet cipher; 
 a straddling checkerboard of the nihilist family of ciphers.
 """
+##DEV???
 
 module Nihilist
 
@@ -261,8 +262,6 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 			end
 		end
 	end
-
-	#handle keys here? as we output?
 
 	#if file_out given, try to output to that file
 	if length(file_out)>0

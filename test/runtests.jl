@@ -14,16 +14,16 @@ function run_test1()
 	ciphertext = Nihilist.encode(cleartext, chart)
 	plaintext = Nihilist.decode(ciphertext, chart)
 	strip_text=join(split(lowercase(cleartext)))
-	return isequal(strip_text, ciphertext[1:length(strip_text)])
+	return isequal(strip_text, plaintext[1:length(strip_text)])
 end
 
 function run_test2()
-	chart = Nihilist.chart_maker()
+	chart = Nihilist.chart_maker(file_loc="~/gitHub/chart.csv")
 	cleartext="The Nihilist cipher was used extensively by the Soviets during and after the war in the 40s."
-	ciphertext = Nihilist.encode(cleartext, chart, spacing_enable=false, num_repeat=4, file_out="output.txt")
-	plaintext = Nihilist.decode("output.txt", chart, num_repeat=4, file_out="clearoutput.txt")
+	ciphertext = Nihilist.encode(cleartext, "~/gitHub/chart.csv", spacing_enable=false, num_repeat=4, file_out="output.txt")
+	plaintext = Nihilist.decode("output.txt", "~/gitHub/chart.csv", num_repeat=4, file_out="clearoutput.txt")
 	strip_text=join(split(lowercase(cleartext)))
-	return isequal(strip_text, ciphertext[1:length(strip_text)])
+	return isequal(strip_text, plaintext[1:length(strip_text)])
 end
 
 function run_test3()
@@ -32,32 +32,34 @@ function run_test3()
 	ciphertext = Nihilist.encode(cleartext, chart, group_length=3, group_per_line=4, num_repeat=3, file_out="output2.txt")
 	plaintext = Nihilist.decode("output2.txt", chart, num_repeat=3, file_out="clearoutput2.txt")
 	strip_text=join(split(lowercase(cleartext)))
-	return isequal(strip_text, ciphertext[1:length(strip_text)])
+	return isequal(strip_text, plaintext[1:length(strip_text)])
 end
 
 function run_test4()
 	chart = chart_maker()
-	cleartext="The VIC cipher was a pencil and paper cipher used by the Soviet spy Reino Hayhanen, codenamed 'VICTOR'.
-				If the cipher were to be given a modern technical name, it would be known as a 'straddling bipartite 
-				monoalphabetic substitution superenciphered by modified double transposition.'[1] However, by general 
-				classification it is part of the Nihilist family of ciphers. It was arguably the most complex hand-operated 
-				cipher ever seen, when it was first discovered. The initial analysis done by the American National Security 
-				Agency (NSA) in 1953 did not absolutely conclude that it was a hand cipher, but its placement in a hollowed 
+	cleartext="The VIC cipher was a pencil and paper cipher used by the Soviet spy Reino Hayhanen codenamed VICTOR.
+				If the cipher were to be given a modern technical name it would be known as a straddling bipartite 
+				monoalphabetic substitution superenciphered by modified double transposition.1 However by general 
+				classification it is part of the Nihilist family of ciphers. It was arguably the most complex handoperated 
+				cipher ever seen when it was first discovered. The initial analysis done by the American National Security 
+				Agency NSA in 1953 did not absolutely conclude that it was a hand cipher but its placement in a hollowed 
 				out 5c coin implied it could be broken by pencil and paper. The VIC cipher remained unbroken until more 
 				information about its structure was available. Although certainly not as complex or secure as modern 
-				computer operated stream ciphers or block ciphers, in practice messages protected by it resisted all 
-				attempts at cryptanalysis by at least the NSA from its discovery in 1953 until Häyhänen's defection 
+				computer operated stream ciphers or block ciphers in practice messages protected by it resisted all 
+				attempts at cryptanalysis by at least the NSA from its discovery in 1953 until Hayhanens defection 
 				in 1957."
 	ciphertext = encode(cleartext, chart, padding=false)
 	plaintext = decode(ciphertext, chart)
-	println(ciphertext)
-	println(plaintext)
+	strip_text=join(split(lowercase(cleartext)))
+	return isequal(strip_text, plaintext[1:length(strip_text)])
 end
 
-@test run_test1()
-@test run_test2()
-@test run_test3()
-@test run_test4()
+@testset "Encode/Decode" begin
+	@test run_test1()
+	@test run_test2()
+	@test run_test3()
+	@test run_test4()
+end
 
 
 #= output-
