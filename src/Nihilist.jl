@@ -33,6 +33,10 @@ for the second and third rows to double encode leading with the row digit. The c
 are placed inline as the output text, and commonly added against a key (modulo 10) of 
 some psuedo-random data, pre-selected and shared.
 
+##Parameters:
+* `file_loc` - location to import chart
+* `file_out` - location to output chart
+
 ##Returns:
 DataFrame of a chart
 """
@@ -55,7 +59,7 @@ function chart_maker(; file_loc::String="", file_out::String="")
 		col_numbers=[]
 
 		#build column by filling randomly 0-9, and removing that choice from list (avoid duplicates)
-		while length(number_pool) > 0
+		while length(number_pool)>0
 			rand_spot=1+(rand(UInt8)%length(number_pool))
 			push!(col_numbers, Symbol(string(number_pool[rand_spot])))
 			number_pool=join(split(number_pool, number_pool[rand_spot]))
@@ -80,7 +84,7 @@ function chart_maker(; file_loc::String="", file_out::String="")
 		#just randomly 'pull' letters from list, just like we did the numbers, but dont pull if its an avoid
 		#Note on 'avoid': The cipherchart double encodes letters using a leading row digit. To avoid
 		#confusion with the single encoded top row when decoding, those two digits are never used alone.
-		while length(top_letters) > 0
+		while length(top_letters)>0
 			if !in(col_pos, avoid)
 				rand_spot=1+(rand(UInt8)%length(top_letters))
 				chart_alph[row_pos]=string(top_letters[rand_spot])
@@ -90,7 +94,7 @@ function chart_maker(; file_loc::String="", file_out::String="")
 		end
 		#row_pos is shifted for the second row
 		row_pos=row_pos%length(chart_alph)+1
-		while length(bottom_letters) > 0
+		while length(bottom_letters)>0
 			rand_spot=1+(rand(UInt8)%length(bottom_letters))
 			chart_alph[row_pos]=string(bottom_letters[rand_spot])
 			bottom_letters=join(split(bottom_letters, bottom_letters[rand_spot]))
@@ -153,11 +157,13 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 			error("File could not be read:\n$file_out")
 		end
 	end
+
 	#message handling - remove special chars and spaces
 	plaintext=join(split(lowercase(message)))
-	chart = (isequal(typeof(chart), String)?chart_maker(file_loc=chart):chart)
-	#take each char of message, find it in the chart- if its a number, put in the 
-	#/ char and encode as itself ~3x (so 11 would become /111111/, 12 = /111222/, so on)
+
+	#check if we load chart or use passed chart
+	chart=(isequal(typeof(chart), String)?chart_maker(file_loc=chart):chart)
+
 	#find the slash in the chart 
 	slashcode=""
 	for col in eachcol(chart)
@@ -298,12 +304,16 @@ function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num
 			error("File could not be read:\n$file_loc")
 		end
 	end
+
 	ciphertext=join(split(message))
+
+	#check if we load chart or use passed chart
 	chart=(isequal(typeof(chart),String)?chart_maker(file_loc=chart):chart)
 
 	#key handling- grab key from keygroup, strip it, and run it
 
 
+	#build plaintext
 	plaintext=""
 	index=1
 	while index<length(ciphertext)
@@ -317,9 +327,9 @@ function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num
 			letter=chart[Symbol(ciphertext[index])][1]
 			index+=1
 		end
-		if isequal(letter, "/") && index+1<length(ciphertext)
+		if isequal(letter, "/") && index+1<length(ciphertext) #watch for bounds errors
 			#numbers next, handle accordingly
-			plaintext*=ciphertext[index+1]
+			plaintext*=ciphertext[index+1] #just pass it as is
 			index+=num_repeat
 		else
 			plaintext*=letter
