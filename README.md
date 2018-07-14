@@ -15,21 +15,31 @@ The message can further be added to a 'keysteam' of digits. Historically, these 
 
 ## Chart:
 
-> `chart = Nihilist.chart_maker()`
+```julia
+chart = Nihilist.chart_maker()
+```
 
 Creates a DataFrame containing the generated chart. Can pass a file location to load from, or a file location to save to.
 
-```chart = Nihilist.chart_maker(file_out="/src/chart.csv")```
+```julia
+chart = Nihilist.chart_maker(file_out="/src/chart.csv")
+```
 
-```loaded_chart = Nihilist.chart_maker(file_loc="/src/chart.csv")```
+```julia
+loaded_chart = Nihilist.chart_maker(file_loc="/src/chart.csv")
+```
 
 ## Encoding:
 
 Takes a number of arguments and returns the decoded text, with options for file input/output as above.
 
-```cleartext="The Nihilist cipher was used extensively by the Soviets during and after the war in the 40s."```
+```julia
+cleartext="The Nihilist cipher was used extensively by the Soviets during and after the war in the 40s."
+```
 
-```ciphertext = Nihilist.encode(cleartext, chart)```
+```julia
+ciphertext = Nihilist.encode(cleartext, chart)
+```
 
 Produces:
 
@@ -37,7 +47,9 @@ Produces:
 > 67054 44142 41075 51270 65017 74636 84398 77974
 > 05307 55479 36807 55484 44480 00145 74979 39632
 
-```ciphertext = Nihilist.encode(cleartext, "/src/chart.csv", spacing_enable=false, num_repeat=4, file_out="output.txt")```
+```julia
+ciphertext = Nihilist.encode(cleartext, "/src/chart.csv", spacing_enable=false, num_repeat=4, file_out="output.txt")
+```
 
 Produces:
 
@@ -49,9 +61,13 @@ Produces:
 
 Simpler then encoding; returns the decoded text, with same options for file input/output as above.
 
-```plaintext = Nihilist.decode(ciphertext, chart)```
+```julia
+plaintext = Nihilist.decode(ciphertext, chart)
+```
 
-```plaintext = Nihilist.decode("output.txt", "/src/chart.csv", num_repeat=4, file_out="clearoutput.txt")```
+```julia
+plaintext = Nihilist.decode("output.txt", "/src/chart.csv", num_repeat=4, file_out="clearoutput.txt")
+```
 
 Produces:
 

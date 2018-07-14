@@ -21,7 +21,7 @@ EX:
 ┌───┬┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 │   ││ 3 │ 4 │ 9 │ 0 │ 7 │ 6 │ 8 │ 2 │ 5 │ 1 │
 ├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
-│ X ││   │ i │ r │ e │ a │ t │ s │ n │ o │   │
+│   ││   │ i │ r │ e │ a │ t │ s │ n │ o │   │
 ├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
 │ 1 ││ v │ k │ y │ j │ d │ m │ z │ g │ c │ w │
 ├───┼┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
@@ -51,7 +51,7 @@ function chart_maker(; file_loc::String="", file_out::String="")
 		number_pool="0123456789"
 		top_letters="aeinorst" #most commonly used letters; placed at top to encode as single digits
 		bottom_letters="bcdfghjklmpquvwxyz./" #/ is special character to denote numbers
-		row_numbers=["X"] #The top row has no 'row' (single digit vs double digit encoding)
+		row_numbers=[" "] #The top row has no 'row' (single digit vs double digit encoding)
 		col_numbers=[]
 
 		#build column by filling randomly 0-9, and removing that choice from list (avoid duplicates)
@@ -70,13 +70,13 @@ function chart_maker(; file_loc::String="", file_out::String="")
 
 		#get avoid POS's - find position in col_nums where row_nums are, and use as mask
 		avoid=[]
-		for i in row_numbers[2:3]
+		for i in row_numbers[2:end]
 			push!(avoid, findfirst(col_numbers, Symbol(i)))
 		end
 
 		#Get alphabet array ready here; set row/col indexers, and fill alphabet with ""
 		row_pos=1; col_pos=1
-		chart_alph=fill(" ", 3, 10)
+		chart_alph=fill(" ", length(row_numbers), length(col_numbers))
 		#just randomly 'pull' letters from list, just like we did the numbers, but dont pull if its an avoid
 		#Note on 'avoid': The cipherchart double encodes letters using a leading row digit. To avoid
 		#confusion with the single encoded top row when decoding, those two digits are never used alone.
@@ -86,17 +86,17 @@ function chart_maker(; file_loc::String="", file_out::String="")
 				chart_alph[row_pos]=string(top_letters[rand_spot])
 				top_letters=join(split(top_letters, top_letters[rand_spot]))
 			end
-			row_pos+=3; col_pos+=1
+			row_pos+=length(row_numbers); col_pos+=1
 		end
 		#row_pos is shifted for the second row
-		row_pos=2
+		row_pos=row_pos%length(chart_alph)+1
 		while length(bottom_letters) > 0
 			rand_spot=1+(rand(UInt8)%length(bottom_letters))
 			chart_alph[row_pos]=string(bottom_letters[rand_spot])
 			bottom_letters=join(split(bottom_letters, bottom_letters[rand_spot]))
-			row_pos+=3
-			if row_pos>length(chart_alph) #hit limit, move to third row
-				row_pos=3
+			row_pos+=length(row_numbers)
+			if row_pos>length(chart_alph) #hit limit, move to 'next' row
+				row_pos=row_pos%length(chart_alph)+1
 			end
 		end
 
@@ -164,7 +164,7 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		row_pos=1
 		for i in col[2]
 			if isequal(i, "/")
-				if !isequal(chart[:CODE][row_pos], "X")
+				if !isequal(chart[:CODE][row_pos], " ") #make sure its not a single encoding row
 					slashcode*=string(chart[:CODE][row_pos])
 				end
 				slashcode*=string(col[1])
@@ -173,7 +173,8 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		end
 	end
 
-	#key handling - BROKEN/NOT IMPLEMENTED
+	#key group handling - BROKEN/NOT IMPLEMENTED
+	#=
 	key_group=""
 	if key>0
 		for i in 1:5-length(string(key))
@@ -182,7 +183,8 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		key_group*=string(key)
 		key=factorial(key) #too big too fast
 	end
-
+	=#
+	
 	#Generate the actual ciphertext
 	ciphertext=""; output=""
 	for letter in plaintext
@@ -200,7 +202,7 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 				for i in col[2]
 					if isequal(i, string(letter))
 						#match to a letter
-						if !isequal(chart[:CODE][row_pos], "X")
+						if !isequal(chart[:CODE][row_pos], " ")
 							#row encoding IF in bottom 2 rows
 							code*=string(chart[:CODE][row_pos])
 						end
@@ -254,7 +256,7 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		end
 	end
 
-	#handle keys here?
+	#handle keys here? as we output?
 
 	#if file_out given, try to output to that file
 	if length(file_out)>0
@@ -298,6 +300,9 @@ function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num
 	end
 	ciphertext=join(split(message))
 	chart=(isequal(typeof(chart),String)?chart_maker(file_loc=chart):chart)
+
+	#key handling- grab key from keygroup, strip it, and run it
+
 
 	plaintext=""
 	index=1
