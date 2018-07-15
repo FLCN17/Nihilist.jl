@@ -4,14 +4,43 @@
 Performs encryption, decryption, and chart generation based on the VIC Soviet cipher; 
 a straddling checkerboard of the nihilist family of ciphers.
 """
+##DEV???
 
 module Nihilist
 
 using DataFrames
 using CSV
 
-#Type union for interpreting loading a chart from file in the encode/decode stages
-DataFrameOrPath=Union{DataFrame, String}
+function formatter(data::Union{DataFrame, Dict})
+	if isequal(typeof(data), DataFrame)
+		#DF => Dict
+		chartDict=[]
+		for row in DataFrames.eachrow(data)
+			rowDict=Dict()
+			for item in row
+				rowDict[item[1]]=item[2]
+			end
+			push!(chartDict,rowDict)
+		end
+		return chartDict
+	else
+		chartDF=DataFrames.DataFrame(String, length(data), length(data[1]))
+		keylist=[]
+		for key in keys(data[1])
+			push!(keylist,key)
+		end
+		rename!(chartDF, f=>t for (f,t)=zip(names(chartDF), Symbol.(keylist)))
+		i=1
+		for row in data
+			for (k, v) in row
+				chartDF[i:i, k] = v
+			end
+			i+=1
+		end
+		return chartDF
+	end
+end
+
 
 """
 	chart_maker(; file_loc::String="", file_out::String="")
@@ -147,7 +176,7 @@ it will be added to the message modulo 10.
 The encoded message, formatted accordingly.
 """
 
-function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
+function encode(message::String, chart::Union{DataFrame, String}; key::Integer=0, spacing_enable::Bool=true, group_length::Integer=5, 
 				group_per_line::Integer=8, key_pos::Integer=1, num_repeat::Integer=3, file_out::String="", padding::Bool=true)
 	#file-load; check for a filepath, and throw a catch
 	if length(message)<45 && isfile(message)
@@ -262,8 +291,6 @@ function encode(message::String, chart::DataFrameOrPath; key::Integer=0, spacing
 		end
 	end
 
-	#handle keys here? as we output?
-
 	#if file_out given, try to output to that file
 	if length(file_out)>0
 		try
@@ -295,7 +322,7 @@ Handles decoding of message. If a key is provided, will be subtracted from the m
 Decoded message.
 """
 
-function decode(message::String, chart::DataFrameOrPath; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
+function decode(message::String, chart::Union{DataFrame, String}; key_pos::Integer=1, num_repeat::Integer=3, file_out::String="")
 	#check if a file, if so, load as message
 	if length(message)<45 && isfile(message)
 		try
