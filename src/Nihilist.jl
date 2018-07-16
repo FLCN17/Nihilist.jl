@@ -4,7 +4,6 @@
 Performs encryption, decryption, and chart generation based on the VIC Soviet cipher; 
 a straddling checkerboard of the nihilist family of ciphers.
 """
-##DEV???
 
 module Nihilist
 
