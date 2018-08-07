@@ -1,0 +1,620 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Documentation for REDCap.jl">
+      
+      
+      
+        <meta name="author" content="bcbi">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="./assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.5, mkdocs-material-2.9.4">
+    
+    
+      
+        <title>REDCap.jl</title>
+      
+    
+    
+      <link rel="stylesheet" href="./assets/stylesheets/application.451f80e5.css">
+      
+      
+    
+    
+      <script src="./assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+      
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="./assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#redcap" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="." title="REDCap.jl" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                REDCap.jl
+              </span>
+              <span class="md-header-nav__topic">
+                Home
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/bcbi/REDCap.jl/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="." title="REDCap.jl" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    REDCap.jl
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/bcbi/REDCap.jl/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Home
+      </label>
+    
+    <a href="." title="Home" class="md-nav__link md-nav__link--active">
+      Home
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" title="Overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" title="Index" class="md-nav__link">
+    Index
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="export/" title="Export" class="md-nav__link">
+      Export
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="import/" title="Import" class="md-nav__link">
+      Import
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="delete/" title="Deletion" class="md-nav__link">
+      Deletion
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="utils/" title="Utilities" class="md-nav__link">
+      Utilities
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="examples/" title="Examples" class="md-nav__link">
+      Examples
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" title="Overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" title="Index" class="md-nav__link">
+    Index
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/bcbi/REDCap.jl/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <p><a id='REDCap-1'></a></p>
+<h1 id="redcap">REDCap</h1>
+<ul>
+<li><a href=".#REDCap-1">REDCap</a><ul>
+<li><a href=".#Overview-1">Overview</a></li>
+<li><a href=".#Usage-1">Usage</a></li>
+<li><a href=".#Index-1">Index</a></li>
+</ul>
+</li>
+<li><a href="export/#Exporting-1">Exporting</a><ul>
+<li><a href="export/#Records-1">Records</a></li>
+<li><a href="export/#Project-Info-1">Project Info</a></li>
+<li><a href="export/#Users-1">Users</a></li>
+<li><a href="export/#Surveys-1">Surveys</a></li>
+<li><a href="export/#Arms-1">Arms</a></li>
+<li><a href="export/#Events-1">Events</a></li>
+<li><a href="export/#Instruments-1">Instruments</a></li>
+<li><a href="export/#Instrument-Event-Mappings-1">Instrument Event Mappings</a></li>
+</ul>
+</li>
+<li><a href="import/#Importing-1">Importing</a><ul>
+<li><a href="import/#Records-1">Records</a></li>
+<li><a href="import/#Project-Info-1">Project Info</a></li>
+<li><a href="import/#Metadata-1">Metadata</a></li>
+<li><a href="import/#Users-1">Users</a></li>
+<li><a href="import/#Files-1">Files</a></li>
+<li><a href="import/#Arms-1">Arms</a></li>
+<li><a href="import/#Events-1">Events</a></li>
+<li><a href="import/#Instrument-Event-Mappings-1">Instrument Event Mappings</a></li>
+</ul>
+</li>
+<li><a href="delete/#Deleting-1">Deleting</a><ul>
+<li><a href="delete/#Records-1">Records</a></li>
+<li><a href="delete/#Files-1">Files</a></li>
+<li><a href="delete/#Arms-1">Arms</a></li>
+<li><a href="delete/#Events-1">Events</a></li>
+</ul>
+</li>
+<li><a href="utils/#Other-Functionality-1">Other Functionality</a><ul>
+<li><a href="utils/#Config-1">Config</a></li>
+<li><a href="utils/#Project-Creation-1">Project Creation</a></li>
+</ul>
+</li>
+</ul>
+<p><a id='Overview-1'></a></p>
+<h2 id="overview">Overview</h2>
+<p>A Julia frontend for the REDCap API. REDCap.jl supports both importing and exporting records, as well as deletion from the REDCap Database. It also includes functions for surveys and report generation.</p>
+<p>This package is meant to be a straightforward wrapper for the REDCap API, and assumes familiarity with REDCap. </p>
+<p><a id='Usage-1'></a></p>
+<h2 id="usage">Usage</h2>
+<p>A basic project can be created and accessed like so:</p>
+<pre><code class="julia">using REDCap
+
+#create config object for project creation
+super_config = REDCap.Config(&quot;&lt;URL&gt;&quot;, &quot;&lt;S-API&gt;&quot;)
+
+config = create_project(super_config, &quot;Test Project&quot;, 1; purpose_other=&quot;Testing REDCap.jl Functionality&quot;, project_notes=&quot;This is not an actual REDCap Database.&quot;)
+
+
+#Importing- NOTE: Records may be incomplete. Only provided fields will be updated
+record=[Dict(&quot;sex&quot;=&gt;&quot;0&quot;,
+      &quot;age&quot;=&gt;&quot;56&quot;,
+      &quot;address&quot;=&gt;&quot;168 Anderson Blvd. Quincy MA 01227&quot;,
+      &quot;height&quot;=&gt;&quot;80&quot;,
+      &quot;dob&quot;=&gt;&quot;1962-04-08&quot;,
+      &quot;record_id&quot;=&gt;&quot;1&quot;,
+      &quot;bmi&quot;=&gt;&quot;125&quot;,
+      &quot;comments&quot;=&gt;&quot;Randomly Generated - Demographics&quot;,
+      &quot;email&quot;=&gt;&quot;ALin@aol.com&quot;,
+      &quot;first_name&quot;=&gt;&quot;Alexia&quot;,
+      &quot;demographics_complete&quot;=&gt;&quot;0&quot;,
+      &quot;telephone&quot;=&gt;&quot;(617) 882-6049&quot;,
+      &quot;weight&quot;=&gt;&quot;80&quot;,
+      &quot;last_name&quot;=&gt;&quot;Lin&quot;,
+      &quot;ethnicity&quot;=&gt;&quot;1&quot;,
+      &quot;race&quot;=&gt;&quot;1&quot;)]
+
+import_records(config, record)
+
+#create new user with basic import/export permissions
+user=[Dict(&quot;username&quot; =&gt; &quot;john_smith@email.com&quot;,
+         &quot;email&quot; =&gt; &quot;john_smith@email.com&quot;,
+         &quot;lastname&quot; =&gt; &quot;Smith&quot;,
+         &quot;api_export&quot;=&gt;&quot;1&quot;,
+         &quot;api_import&quot;=&gt;&quot;1&quot;)]
+
+import_users(config, user)
+
+#Exporting
+records = export_records(config)
+
+#Edit project info to remove development status
+final_proj_info=Dict(&quot;project_title&quot; =&gt; &quot;RC Production&quot;,
+                     &quot;in_production&quot; =&gt; &quot;1&quot;)
+import_project_information(config, final_proj_info)
+
+#pdf summary of the project
+export_pdf(config, &quot;/&lt;path&gt;/export.pdf&quot;, allRecords=true)
+</code></pre>
+
+<p>Several projects may wish to take advantage of saving and loading directly to/from a file;</p>
+<pre><code class="julia">#Exporting - file_loc must be provided as the save path
+export_records(config, file_loc=&quot;&lt;path&gt;/records.xml&quot;, format=&quot;xml&quot;)
+
+export_users(config, file_loc=&quot;&lt;path&gt;/users.csv&quot;, format=&quot;csv&quot;)
+
+#Importing - data passed as a file-path is loaded directly into the API
+import_records(config, &quot;&lt;path&gt;/records.xml&quot;, format=&quot;xml&quot;) #NOTE: The format must match the file format you are uploading
+
+import_users(config, &quot;&lt;path&gt;/users.csv&quot;, format=&quot;csv&quot;)
+</code></pre>
+
+<p><a id='Index-1'></a></p>
+<h2 id="index">Index</h2>
+<ul>
+<li><a href="utils/#REDCap.create_project-Tuple{REDCap.Config,String,Integer}"><code>REDCap.create_project</code></a></li>
+<li><a href="delete/#REDCap.delete_arms-Tuple{REDCap.Config,Array}"><code>REDCap.delete_arms</code></a></li>
+<li><a href="delete/#REDCap.delete_events-Tuple{REDCap.Config,Array}"><code>REDCap.delete_events</code></a></li>
+<li><a href="delete/#REDCap.delete_file-Tuple{REDCap.Config,String,String,String}"><code>REDCap.delete_file</code></a></li>
+<li><a href="delete/#REDCap.delete_records-Tuple{REDCap.Config,Array}"><code>REDCap.delete_records</code></a></li>
+<li><a href="export/#REDCap.export_arms-Tuple{REDCap.Config}"><code>REDCap.export_arms</code></a></li>
+<li><a href="export/#REDCap.export_events-Tuple{REDCap.Config}"><code>REDCap.export_events</code></a></li>
+<li><a href="export/#REDCap.export_instrument_event_mappings"><code>REDCap.export_instrument_event_mappings</code></a></li>
+<li><a href="export/#REDCap.export_instruments-Tuple{REDCap.Config}"><code>REDCap.export_instruments</code></a></li>
+<li><a href="export/#REDCap.export_records-Tuple{REDCap.Config}"><code>REDCap.export_records</code></a></li>
+<li><a href="export/#REDCap.export_report-Tuple{REDCap.Config,Integer}"><code>REDCap.export_report</code></a></li>
+<li><a href="export/#REDCap.export_users-Tuple{REDCap.Config}"><code>REDCap.export_users</code></a></li>
+<li><a href="import/#REDCap.import_arms-Tuple{REDCap.Config,Any}"><code>REDCap.import_arms</code></a></li>
+<li><a href="import/#REDCap.import_events-Tuple{REDCap.Config,Any}"><code>REDCap.import_events</code></a></li>
+<li><a href="import/#REDCap.import_file-Tuple{REDCap.Config,String,String,String,String}"><code>REDCap.import_file</code></a></li>
+<li><a href="import/#REDCap.import_instrument_event_mappings-Tuple{REDCap.Config,Any}"><code>REDCap.import_instrument_event_mappings</code></a></li>
+<li><a href="import/#REDCap.import_metadata-Tuple{REDCap.Config,Any}"><code>REDCap.import_metadata</code></a></li>
+<li><a href="import/#REDCap.import_project_information-Tuple{REDCap.Config,Any}"><code>REDCap.import_project_information</code></a></li>
+<li><a href="import/#REDCap.import_records-Tuple{REDCap.Config,Any}"><code>REDCap.import_records</code></a></li>
+<li><a href="import/#REDCap.import_users-Tuple{REDCap.Config,Any}"><code>REDCap.import_users</code></a></li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="export/" title="Export" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Export
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="./assets/javascripts/application.30f6b8b1.js"></script>
+      
+      <script>app.initialize({version:"0.17.5",url:{base:"."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
